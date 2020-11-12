@@ -1,0 +1,19 @@
+{
+    "name": "zhaohangyang/huoban_guzzlehttp",
+    "require": {
+        "guzzlehttp/guzzle": "6"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Huoban\\": "src/",
+            "Huoban\\Models\\": "src/Models",
+            "Huoban\\Helpers\\": "src/Helpers"
+        }
+    }
+}

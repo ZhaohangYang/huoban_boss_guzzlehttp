@@ -11,10 +11,10 @@ return array(
     'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Symfony\\Polyfill\\Intl\\Idn\\' => array($vendorDir . '/symfony/polyfill-intl-idn'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Huoban\\Models\\' => array($baseDir . '/src/Models'),
-    'Huoban\\Helpers\\' => array($baseDir . '/src/Helpers'),
-    'Huoban\\' => array($baseDir . '/src'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
+    'Boss\\Models\\' => array($baseDir . '/src/Models'),
+    'Boss\\Helpers\\' => array($baseDir . '/src/Helpers'),
+    'Boss\\' => array($baseDir . '/src'),
 );

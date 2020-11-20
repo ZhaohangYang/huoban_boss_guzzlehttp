@@ -1,14 +1,14 @@
 <?php
 
-namespace Huoban;
+namespace Boss;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Exception\ServerException;
 
-use Huoban\Models\HuobanTicket;
+use Boss\Models\BossAuthorization;
 
-class Huoban
+class Boss
 {
    public static $client;
 
@@ -32,35 +32,29 @@ class Huoban
    {
       self::$initParams = $params;
 
-      self::$appType = $params['app_type'] ?? 'table';
       self::$applicationId = $params['application_id'] ?? null;
       self::$applicationSecret = $params['application_secret'] ?? null;
 
       self::setClient();
       //如果ticket存在并且不为空 直接启用传入的ticket;
-      $ticket = (isset($params['ticket']) && !empty($params['ticket'])) ?  $params['ticket'] : HuobanTicket::getTicket(self::$appType, self::$applicationId, self::$applicationSecret);
-      self::setTicket($ticket);
-      //是否开启别名模式
-      if (isset($params['alias_model']) && isset($params['space_id'])) {
-         self::aliasModel($params['space_id']);
-      }
+      $authorization = (isset($params['authorization']) && !empty($params['authorization'])) ?  $params['authorization'] : BossAuthorization::get(self::$applicationId, self::$applicationSecret);
+      self::setAuthorization($authorization);
    }
    private static function setClient()
    {
       self::$client =  new Client([
-         'base_uri' =>  constant("TEST") ? 'https://api-dev.huoban.com' : 'https://api.huoban.com',
+         'base_uri' =>  constant("TEST") ? 'http://api.dev.huoban.com' : 'https://api.huoban.com',
          'timeout'  => 5.0,
       ]);
    }
-   private static function setTicket($ticket)
+   private static function setAuthorization($authorization)
    {
-      self::$client->config['headers']['X-Huoban-Ticket'] = $ticket;
+      // self::$client->config['headers']['Authorization'] = 'Bearer ' . $authorization;
+      self::$client->config['headers']['Cookie'] = 'HUOBAN_SESSIONID=a8e8fa000d0296151251493d843d4cfe; HUOBAN_SYNC=674b87WDy5DU0QGhmXZJfJ2wll0%2BuanFFLG60TTQAwX0m%2FyHLw3fdQXuHsWSNIop%2Fr%2BHZ5sfnpKQyg; access_token=jH4FOXaTapMWq5f0HBIMbDxA1aQGb5tuNxYMiRSk001; xsrf=f7cdcb5f8eae83e8a5ddbb1769f3195d; hb_dev_host=dev03; HUOBAN_AUTH=5984ab6f570d0cca04a6afc0d84cd2c1; HUOBAN_DATA=JIFs5kxDZ%2F6UY0XDtSmESvmqlb8nMJ%2FnmEb4dMeHOLcJlK2o35N9sQUrE0lpvhoZxzosSmL0dJjUmEzluOIg6Q%3D%3D; HUOBAN_SESSIONID_DEVELOPMENT=8cb4ca3893dfabc60647b4c883cc284d; HUOBAN_AUTH_DEVELOPMENT=815191e29289205fbb280acf0cb5591b; HUOBAN_DATA_DEVELOPMENT=gC56p7W8ExNtLQSSslg8HD%2BfrtlPDlH%2F5bSiKvrwez3l3YcBP6DHS6IXrzrn3swc97lsMTJ6tShFV7sBY5PycQ%3D%3D';
+      // self::$client->config['headers']['X-Huoban-Return-Alias-Space-Id'] = $space_id;
+      self::$client->config['headers']['X-Huoban-Ticket'] = $authorization;
    }
-   public static function aliasModel($space_id)
-   {
-      self::$client->config['headers']['X-Huoban-Return-Alias-Space-Id'] = $space_id;
-   }
-   public static function format($url, $body, $options)
+   public static function format($url, $body = [], $options = [])
    {
       $url = self::formatUrl($url, $options);
       $headers = self::formatHeader($options);
